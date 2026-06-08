@@ -1,0 +1,16 @@
+{
+  "name": "sensor-api",
+  "version": "1.0.0",
+  "description": "an api that gets data from sensors and transmits it",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Kazeem Oluwanifemi",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
