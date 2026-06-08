@@ -6,5 +6,7 @@ export async function sensorRouter(req, res) {
         return await postData(req, res)
     } else if(req.method == 'GET' && req.url == '/getdata') {
         return await getAll(req, res)
+    } else if(req.method == 'GET' && req.url == '/getlatestdata') {
+        return await getLatest(res, req)
     }
 }
