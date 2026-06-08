@@ -6,7 +6,7 @@ export async function streamRequest(req, res){
             data += chunk
         }
 
-        // console.log(typeof(data))
+        console.log("data streamed")
 
         return data
     } catch(err) {

@@ -14,51 +14,42 @@ export async function postData(req, res) {
     try {
         let newData = await streamRequest(req)
         let parsedData = JSON.parse(newData)
-
-        // const __dirname = path.dirname(fileURLToPath(import.meta.url))
-        // const projectRoot = path.resolve(__dirname, '..')
-        // const dirPath = projectRoot
-
-        // const finalPath = path.join(dirPath, "apiDatabase.json")
+        let pathtoDb = ""
+        console.log("data parsed")
 
         let validData = inputValidator(parsedData)
+        console.log("data validated")
 
-        let sensorData = JSON.stringify(validData, null, 2)
 
-        try {
-            const pathtoDb = getPath("apiDatabase.json")
-        } catch(err){
-            console.error(err)
+        if ((validData == 'incomplete sensor data') || (validData == 'invalid sensor data')) {
+
+            responseSetter(res, 'text/html', 400)
+
+            const feedbackMsg = feedback(400)
+
+            res.end(feedbackMsg)
+            console.log("error occured")
+
+        } else {
+            let sensorData = JSON.stringify(validData, null, 2)
+            console.log("data stringified")
+
+            pathtoDb = getPath("apiDatabase.json")
+            console.log("path to db gotten")
+
+
+            console.log(pathtoDb)
+
+            await writeToFile(pathtoDb, sensorData)
+
+            console.log("written to file")
+
+            responseSetter(res, 'application/JSON', 200)
+
+            const feedbackMsg = feedback(200)
+
+            res.end(feedbackMsg)
         }
-
-        await writeToFile(pathtoDb, sensorData)
-
-        console.log("written to file")
-
-
-        responseSetter(res, 'application/JSON', 200)
-
-        const feedbackMsg = feedback(200)
-
-        // res.end(feedbackMsg)
-
-        // console.log(sensorData)
-
-        // return
-
-        // if ((validData == 'incomplete sensor data') || (validData == 'invalid sensor data')) {
-
-        //     responseSetter(res, 'text/html', 400)
-
-        //     const feedbackMsg = feedback(400)
-
-        //     res.end(feedbackMsg)
-        //     console.log("error occured")
-
-        // } else {
-
-
-        // }
 
     } catch (err) {
         responseSetter(res, 'text/html', 500)
