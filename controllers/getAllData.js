@@ -1,16 +1,24 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { getPath } from '../utils/getPath.js'
+import { responseSetter } from '../utils/responseSetter.js'
+import { feedback } from '../utils/feedbackMessage.js'
 
-export function getAll(req, res){
-    const __dirname = import.meta.dirname
-    console.log(__dirname)
-    let pathToDb = path.join(__dirname, "apiDatabase.json")
+export async function getAll(req, res) {
+    try {
+        console.log("Get function reached")
+        let pathToDb = getPath("apiDatabase.json")
+        console.log("path gotten", pathToDb)
 
-    let allData = fs.readFile(pathToDb, 'utf-8', (err, data) => {
-        if(err) {
-            console.log(err)
-        } else {
-            res.end(JSON.parse(data))
-        }
-    })
+        let allData = await fs.readFile(pathToDb, 'utf-8')
+        responseSetter(res, 'text/html', 200)
+
+        let feedbackMsg = feedback(200)
+        res.end(allData)
+        res.end(feedbackMsg)
+    } catch(err) {
+        console.err(err)
+    }
+    
+
 }
