@@ -46,7 +46,7 @@ export async function postData(req, res) {
 
             responseSetter(res, 'application/JSON', 200)
 
-            const feedbackMsg = feedback(200)
+            let feedbackMsg = feedback(200)
 
             res.end(feedbackMsg)
         }
@@ -54,7 +54,7 @@ export async function postData(req, res) {
     } catch (err) {
         responseSetter(res, 'text/html', 500)
 
-        const feedbackMsg = feedback(500)
+        let feedbackMsg = feedback(500)
 
         res.end(feedbackMsg)
     }

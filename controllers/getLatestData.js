@@ -7,20 +7,28 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 export async function getLatestData(req, res) {
-    try{
+    try {
         let pathToDb = getPath("apiDatabase.json")
         let existingSensorData = [await fs.readFile(pathToDb, 'utf8')]
 
-        console.log(existingSensorData)
-
         let lastData = JSON.parse(existingSensorData.pop())
 
-        res.write(lastData)
+        if (res.write(JSON.stringify(lastData))) {
+            responseSetter(res, 'application/JSON', 200)
 
-        responseSetter(res, 'application/JSON', 200)
-        let feedbackMsg = feedback(200)
+            let feedbackMsg = feedback(200)
+            
+            res.end(`\n ${feedbackMsg}`)
 
-        res.end(feedbackMsg)
+        } else {
+            responseSetter(res, 'text/html', 500)
+
+            let feedbackMsg = feedback(500)
+
+            res.end(feedback)
+        }
+
+
 
 
         // Algorithm: 
@@ -31,12 +39,12 @@ export async function getLatestData(req, res) {
         // return it as a response
         // end the connection
 
-    } catch(err) {
+    } catch (err) {
         console.error(err)
         responseSetter(res, 'text/html', 500)
         let feedbackMsg = feedback(200)
 
         res.end(feedbackMsg)
     }
-    
+
 }

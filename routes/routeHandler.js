@@ -8,6 +8,6 @@ export async function sensorRouter(req, res) {
     } else if(req.method == 'GET' && req.url == '/getdata') {
         return await getAll(req, res)
     } else if(req.method == 'GET' && req.url == '/getlatestdata') {
-        return await getLatestData(res, req)
+        return await getLatestData(req, res)
     }
 }
